@@ -2181,6 +2181,9 @@
     <ClInclude Include="ql\termstructures\yield\overnightindexfutureratehelper.hpp">
       <Filter>termstructures\yield</Filter>
     </ClInclude>
+    <ClInclude Include="ql\termstructures\yield\piecewisespreadyieldcurve.hpp">
+      <Filter>termstructures\yield</Filter>
+    </ClInclude>
     <ClInclude Include="ql\termstructures\yield\piecewiseyieldcurve.hpp">
       <Filter>termstructures\yield</Filter>
     </ClInclude>
@@ -2191,6 +2194,12 @@
       <Filter>termstructures\yield</Filter>
     </ClInclude>
     <ClInclude Include="ql\termstructures\yield\ratehelpers.hpp">
+      <Filter>termstructures\yield</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\termstructures\yield\spreadbootstraptraits.hpp">
+      <Filter>termstructures\yield</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\termstructures\yield\spreaddiscountcurve.hpp">
       <Filter>termstructures\yield</Filter>
     </ClInclude>
     <ClInclude Include="ql\termstructures\yield\zerocurve.hpp">

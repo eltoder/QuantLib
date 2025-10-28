@@ -28,6 +28,7 @@
 
 #include <ql/patterns/lazyobject.hpp>
 #include <ql/termstructures/iterativebootstrap.hpp>
+#include <ql/termstructures/multicurve.hpp>
 #include <ql/termstructures/yield/bootstraptraits.hpp>
 #include <utility>
 
@@ -58,7 +59,8 @@ namespace QuantLib {
               template <class> class Bootstrap = IterativeBootstrap>
     class PiecewiseYieldCurve
         : public Traits::template curve<Interpolator>::type,
-          public LazyObject {
+          public LazyObject,
+          public ext::enable_shared_from_this<PiecewiseYieldCurve<Traits,Interpolator,Bootstrap>> {
       private:
         typedef typename Traits::template curve<Interpolator>::type base_curve;
         typedef PiecewiseYieldCurve<Traits,Interpolator,Bootstrap> this_curve;
@@ -142,7 +144,13 @@ namespace QuantLib {
         //@{
         void update() override;
         //@}
-        const bootstrap_type& bootstrap() const { return bootstrap_; }
+        Handle<YieldTermStructure> addToMultiCurve(
+                    RelinkableHandle<YieldTermStructure>& internalHandle,
+                    const ext::shared_ptr<MultiCurve>& mc) {
+            static_assert(std::is_convertible_v<bootstrap_type*, MultiCurveBootstrapContributor*>,
+                          "bootstrap type is not compatible with MultiCurve");
+            return mc->addCurve(internalHandle, this->shared_from_this(), &this->bootstrap_);
+        }
       protected:
         template <class... Args>
         PiecewiseYieldCurve(

@@ -41,6 +41,8 @@ namespace QuantLib {
            Internal handle, which must be an empty RelinkableHandle, should be
            used within the cycle. External handle should be used outside of the
            cycle. */
+        // TODO: Consider making this private, since it should not be called directly.
+        // Then we can also pass shared_ptr to self and avoid enable_shared_from_this.
         Handle<YieldTermStructure> addCurve(RelinkableHandle<YieldTermStructure>& internalHandle,
                                             ext::shared_ptr<YieldTermStructure> curve,
                                             const MultiCurveBootstrapContributor* bootstrap);

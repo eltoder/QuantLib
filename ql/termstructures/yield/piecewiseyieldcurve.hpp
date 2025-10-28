@@ -33,6 +33,8 @@
 
 namespace QuantLib {
 
+    class MultiCurveBootstrapContributor;
+
     //! Piecewise yield term structure
     /*! This term structure is bootstrapped on a number of interest
         rate instruments which are passed as a vector of pointers to
@@ -142,7 +144,11 @@ namespace QuantLib {
         //@{
         void update() override;
         //@}
-        const bootstrap_type& bootstrap() const { return bootstrap_; }
+        const MultiCurveBootstrapContributor* multiCurveBootstrapContributor() const {
+            static_assert(std::is_convertible_v<bootstrap_type*, MultiCurveBootstrapContributor*>,
+                          "bootstrap type is not compatible with MultiCurve");
+            return &bootstrap_;
+        }
       protected:
         template <class... Args>
         PiecewiseYieldCurve(

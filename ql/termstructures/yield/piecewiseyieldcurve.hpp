@@ -142,7 +142,13 @@ namespace QuantLib {
         //@{
         void update() override;
         //@}
-        const void* multiCurveBootstrapContributor() const override { return &bootstrap_; }
+        const MultiCurveBootstrapContributor* multiCurveBootstrapContributor() const override {
+            if constexpr (std::is_convertible_v<bootstrap_type*, MultiCurveBootstrapContributor*>) {
+                return &bootstrap_;
+            } else {
+                return nullptr;
+            }
+        }
 
       protected:
         template <class... Args>

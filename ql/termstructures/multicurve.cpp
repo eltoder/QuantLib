@@ -33,8 +33,7 @@ namespace QuantLib {
                    "internal handle must be empty; was the curve added already?");
         QL_REQUIRE(curve != nullptr, "curve must not be null");
 
-        auto bootstrap = static_cast<const MultiCurveBootstrapContributor*>(
-            curve->multiCurveBootstrapContributor());
+        auto bootstrap = curve->multiCurveBootstrapContributor();
         QL_REQUIRE(bootstrap,
                    "curve does not provide a valid multi curve bootstrap contributor");
 

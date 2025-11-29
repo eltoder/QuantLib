@@ -38,7 +38,7 @@ namespace QuantLib {
 class MultiCurveBootstrap;
 
 class MultiCurveBootstrapContributor {
-public:
+  public:
     virtual ~MultiCurveBootstrapContributor() {}
     virtual void
     setParentBootstrapper(const QuantLib::ext::shared_ptr<MultiCurveBootstrap>& b) const = 0;
@@ -46,6 +46,12 @@ public:
     virtual void setCostFunctionArgument(const Array& v) const = 0;
     virtual Array evaluateCostFunction() const = 0;
     virtual void setToValid() const = 0;
+};
+
+class MultiCurveBootstrapProvider {
+  public:
+    virtual ~MultiCurveBootstrapProvider() = default;
+    virtual const MultiCurveBootstrapContributor* multiCurveBootstrapContributor() const = 0;
 };
 
 class MultiCurveBootstrap : public QuantLib::ext::enable_shared_from_this<MultiCurveBootstrap> {

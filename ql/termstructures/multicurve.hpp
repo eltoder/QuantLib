@@ -42,7 +42,7 @@ namespace QuantLib {
            used within the cycle. External handle should be used outside of the
            cycle. */
         Handle<YieldTermStructure> addCurve(RelinkableHandle<YieldTermStructure>& internalHandle,
-                                            ext::shared_ptr<YieldTermStructure> curve);
+                                            ext::shared_ptr<YieldTermStructure>&& curve);
 
 
       private:

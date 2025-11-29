@@ -1592,8 +1592,8 @@ BOOST_AUTO_TEST_CASE(testMultiCurve) {
 
     auto multiCurve = ext::make_shared<MultiCurve>(ext::make_shared<MultiCurveBootstrap>(accuracy));
 
-    auto curve3m = multiCurve->addCurve(intcurve3m, ptr3m);
-    auto curve6m = multiCurve->addCurve(intcurve6m, ptr6m);
+    auto curve3m = multiCurve->addCurve(intcurve3m, std::move(ptr3m));
+    auto curve6m = multiCurve->addCurve(intcurve6m, std::move(ptr6m));
 
     // check instrument npvs
 

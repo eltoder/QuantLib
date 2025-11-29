@@ -27,8 +27,12 @@
 #define quantlib_piecewise_yield_curve_hpp
 
 #include <ql/patterns/lazyobject.hpp>
+// TODO: Pure interface classes like MultiCurveBootstrapContributor and
+// MultiCurveBootstrapProvider should probably be in their own header file.
+#include <ql/termstructures/globalbootstrap.hpp>
 #include <ql/termstructures/iterativebootstrap.hpp>
 #include <ql/termstructures/yield/bootstraptraits.hpp>
+#include <type_traits>
 #include <utility>
 
 namespace QuantLib {
@@ -58,7 +62,8 @@ namespace QuantLib {
               template <class> class Bootstrap = IterativeBootstrap>
     class PiecewiseYieldCurve
         : public Traits::template curve<Interpolator>::type,
-          public LazyObject {
+          public LazyObject,
+          public MultiCurveBootstrapProvider {
       private:
         typedef typename Traits::template curve<Interpolator>::type base_curve;
         typedef PiecewiseYieldCurve<Traits,Interpolator,Bootstrap> this_curve;

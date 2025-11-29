@@ -27,13 +27,14 @@ namespace QuantLib {
 
     Handle<YieldTermStructure>
     MultiCurve::addCurve(RelinkableHandle<YieldTermStructure>& internalHandle,
-                         ext::shared_ptr<YieldTermStructure> curve) {
+                         ext::shared_ptr<YieldTermStructure>&& curve) {
 
         QL_REQUIRE(internalHandle.empty(),
                    "internal handle must be empty; was the curve added already?");
         QL_REQUIRE(curve != nullptr, "curve must not be null");
 
-        auto bootstrap = curve->multiCurveBootstrapContributor();
+        auto provider = dynamic_cast<MultiCurveBootstrapProvider*>(curve.get());
+        auto bootstrap = provider ? provider->multiCurveBootstrapContributor() : nullptr;
         QL_REQUIRE(bootstrap,
                    "curve does not provide a valid multi curve bootstrap contributor");
 

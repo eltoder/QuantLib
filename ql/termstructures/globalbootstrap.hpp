@@ -48,6 +48,9 @@ class MultiCurveBootstrapContributor {
     virtual void setToValid() const = 0;
 };
 
+template <template <class> class Bootstrap>
+struct IsMultiCurveBootstrapContributor : std::false_type {};
+
 class MultiCurveBootstrapProvider {
   public:
     virtual ~MultiCurveBootstrapProvider() = default;
@@ -154,6 +157,9 @@ template <class Curve> class GlobalBootstrap final : public MultiCurveBootstrapC
     mutable Size firstAdditionalHelper_ = 0, numberAdditionalHelpers_= 0;
     mutable QuantLib::ext::shared_ptr<MultiCurveBootstrap> parentBootstrapper_ = nullptr;
 };
+
+template <>
+struct IsMultiCurveBootstrapContributor<GlobalBootstrap> : std::true_type {};
 
 // template definitions
 

@@ -37,6 +37,22 @@
 
 namespace QuantLib {
 
+    namespace detail {
+        template <template <class> class Bootstrap, class Curve, class Enable = void>
+        class PiecewiseCurveBootstrapProvider {};
+
+        template <template <class> class Bootstrap, class Curve>
+        class PiecewiseCurveBootstrapProvider<
+            Bootstrap,
+            Curve,
+            std::enable_if_t<IsMultiCurveBootstrapContributor<Bootstrap>::value>>
+            : public MultiCurveBootstrapProvider {
+            const MultiCurveBootstrapContributor* multiCurveBootstrapContributor() const override {
+                return &static_cast<const Curve*>(this)->bootstrap_;
+            }
+        };
+    }
+
     //! Piecewise yield term structure
     /*! This term structure is bootstrapped on a number of interest
         rate instruments which are passed as a vector of pointers to
@@ -63,7 +79,8 @@ namespace QuantLib {
     class PiecewiseYieldCurve
         : public Traits::template curve<Interpolator>::type,
           public LazyObject,
-          public MultiCurveBootstrapProvider {
+          public detail::PiecewiseCurveBootstrapProvider<
+              Bootstrap, PiecewiseYieldCurve<Traits,Interpolator,Bootstrap>> {
       private:
         typedef typename Traits::template curve<Interpolator>::type base_curve;
         typedef PiecewiseYieldCurve<Traits,Interpolator,Bootstrap> this_curve;
@@ -147,14 +164,6 @@ namespace QuantLib {
         //@{
         void update() override;
         //@}
-        const MultiCurveBootstrapContributor* multiCurveBootstrapContributor() const override {
-            if constexpr (std::is_convertible_v<bootstrap_type*, MultiCurveBootstrapContributor*>) {
-                return &bootstrap_;
-            } else {
-                return nullptr;
-            }
-        }
-
       protected:
         template <class... Args>
         PiecewiseYieldCurve(
@@ -181,6 +190,8 @@ namespace QuantLib {
         // it would increase the complexity---which is high enough
         // already.
         friend class Bootstrap<this_curve>;
+        friend class detail::PiecewiseCurveBootstrapProvider<
+            Bootstrap, PiecewiseYieldCurve<Traits,Interpolator,Bootstrap>>;
         Bootstrap<this_curve> bootstrap_;
     };
 
